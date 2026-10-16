@@ -30,19 +30,25 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23000022'/><text x='50' y='70' font-family='Arial' font-size='62' font-weight='bold' fill='%23EA3223' text-anchor='middle'>N</text></svg>">
 </head>
 <body data-page="home">
+<script src="assets/js/splash.js"></script>
 
 <div id="site-header-mount"></div>
 
 <main>
 
   <!-- 1 · HERO -->
-  <section class="hero">
+  <section class="hero hero--shot">
+    <div class="hero__photo">
+      <img src="assets/img/hero-customers.jpg" width="1600" height="638"
+           fetchpriority="high" decoding="async"
+           alt="Two Novus customers on a Makurdi rooftop, one holding a phone showing the Novus app sign-in screen, the other holding a Novus debit card.">
+    </div>
+    <span class="hero__scrim"></span>
     <span class="hero__blob b1"></span>
     <span class="hero__blob b2"></span>
-    <span class="hero__blob b3"></span>
     <div class="wrap">
       <div class="hero__grid">
-        <div data-rv="left">
+        <div class="hero__copy" data-rv="left">
           <span class="hero__tag"><span class="pulse"></span> Novus Microfinance Bank · Makurdi, Benue State</span>
           <h1>Banking that grows with Benue.</h1>
           <p class="hero__sub">Save, borrow and pay with a bank that knows your market, your farm and your community. Open an account in minutes on your phone, at a branch or with a Novus agent near you.</p>
@@ -56,12 +62,7 @@
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> 24/7 USSD, agents and Novi</span>
           </div>
         </div>
-        <div class="hero__media" data-rv="scale" data-rv-d="140">
-          <div class="photo">
-            <div class="photo__icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.4"/><path d="M8 6l1.5-2h5L16 6"/></svg></div>
-            <div class="photo__note">Photo: a smiling trader at a Makurdi market stall holding her phone, fresh produce stacked behind her. Warm daylight, real customer (with consent).</div>
-          </div>
-        </div>
+        <div class="hero__spacer" aria-hidden="true"></div>
       </div>
     </div>
   </section>

@@ -60,7 +60,15 @@
     },
     { id: 'agric', label: 'Agric Finance', href: 'agric-finance.html' },
     { id: 'digital', label: 'Digital Banking', href: 'digital-banking.html' },
-    { id: 'about', label: 'About Us', href: 'about.html' },
+    {
+      id: 'about', label: 'About Us', href: 'about.html', children: [
+        { label: 'Our story', desc: 'Who we are and who we serve', href: 'about.html' },
+        { label: 'Leadership', desc: 'The people running the bank', href: 'about.html#leadership' },
+        { label: 'News', desc: 'Announcements and customer stories', href: 'news.html' },
+        { label: 'The Novus Weekly', desc: 'Our Friday newsletter, and past issues', href: 'newsletter.html' },
+        { label: 'Careers', desc: 'Open roles and how we hire', href: 'careers.html' }
+      ]
+    },
     { id: 'help', label: 'Help', href: 'help.html' }
   ];
 
@@ -133,6 +141,7 @@
               item.label + '</a>' + subs + '</li>';
           }).join('') +
           '<li><a style="animation-delay:' + (NAV.length * 45 + 90) + 'ms" href="news.html">News</a></li>' +
+          '<li><a style="animation-delay:' + (NAV.length * 45 + 112) + 'ms" href="newsletter.html">Newsletter</a></li>' +
           '<li><a style="animation-delay:' + (NAV.length * 45 + 135) + 'ms" href="careers.html">Careers</a></li>' +
           '<li><a style="animation-delay:' + (NAV.length * 45 + 180) + 'ms" href="contact.html">Contact Us</a></li>' +
         '</ul></nav>' +
@@ -165,7 +174,8 @@
       {
         h: 'Company', links: [
           ['About Us', 'about.html'], ['Leadership', 'about.html#leadership'],
-          ['Careers', 'careers.html'], ['News', 'news.html']
+          ['Careers', 'careers.html'], ['News', 'news.html'],
+          ['Newsletter', 'newsletter.html']
         ]
       },
       {
