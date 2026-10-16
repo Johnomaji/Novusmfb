@@ -1,0 +1,401 @@
+/* ==========================================================================
+   Novi — AI assistant widget
+   ========================================================================== */
+
+.novi{
+  --novi-red:#EA3223;
+  --novi-gold:#F2A900;
+  --novi-midnight:#000022;
+  --novi-blue:#2B3A8C;
+  --novi-bg:#f6f6fb;
+  font-family:'Inter',-apple-system,'Segoe UI',Arial,sans-serif;
+}
+
+/* ---------- Launcher ---------- */
+.novi-dock{
+  position:fixed;right:20px;bottom:20px;z-index:950;
+  display:flex;flex-direction:column;align-items:flex-end;gap:11px;
+}
+.novi-launch{
+  width:60px;height:60px;border-radius:50%;position:relative;
+  background:linear-gradient(140deg,#ff5a3c,#EA3223 48%,#c8261a);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 30px rgba(234,50,35,.44),0 2px 8px rgba(0,0,34,.2);
+  transition:transform .4s cubic-bezier(.34,1.3,.64,1),box-shadow .35s;
+  flex:none;
+}
+.novi-launch:hover{transform:scale(1.08) rotate(4deg);box-shadow:0 16px 40px rgba(234,50,35,.55)}
+.novi-launch:active{transform:scale(.97)}
+.novi-launch__n{
+  font-family:'Inter Tight','Inter',sans-serif;font-weight:900;font-size:1.6rem;
+  letter-spacing:-.04em;line-height:1;transition:opacity .25s,transform .35s;
+}
+.novi-launch__x{
+  position:absolute;opacity:0;transform:rotate(-90deg) scale(.5);
+  transition:opacity .25s,transform .35s cubic-bezier(.34,1.3,.64,1);
+}
+.novi-launch__x svg{width:22px;height:22px}
+.novi.is-open .novi-launch__n{opacity:0;transform:rotate(90deg) scale(.5)}
+.novi.is-open .novi-launch__x{opacity:1;transform:rotate(0) scale(1)}
+.novi.is-open .novi-launch{background:linear-gradient(140deg,#2a2a62,#000022)}
+
+/* halo ping */
+.novi-launch::before,.novi-launch::after{
+  content:'';position:absolute;inset:0;border-radius:50%;border:2px solid rgba(234,50,35,.5);
+  animation:noviPing 2.8s cubic-bezier(0,.2,.8,1) infinite;
+}
+.novi-launch::after{animation-delay:1.4s}
+@keyframes noviPing{
+  0%{transform:scale(1);opacity:.75}
+  70%{transform:scale(1.75);opacity:0}
+  100%{transform:scale(1.75);opacity:0}
+}
+.novi.is-open .novi-launch::before,.novi.is-open .novi-launch::after{display:none}
+
+/* unread dot */
+.novi-badge{
+  position:absolute;top:-2px;right:-2px;min-width:20px;height:20px;border-radius:10px;
+  background:var(--novi-gold);color:var(--novi-midnight);font-size:.68rem;font-weight:900;
+  display:none;align-items:center;justify-content:center;border:2.5px solid #fff;padding:0 4px;
+  animation:popIn .4s cubic-bezier(.34,1.3,.64,1);
+}
+.novi-badge.is-on{display:flex}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+
+/* WhatsApp secondary button */
+.novi-wa{
+  width:48px;height:48px;border-radius:50%;background:#25D366;color:#fff;
+  display:flex;align-items:center;justify-content:center;order:2;
+  box-shadow:0 8px 22px rgba(37,211,102,.4);
+  transition:transform .35s cubic-bezier(.34,1.3,.64,1);
+}
+.novi-wa:hover{transform:scale(1.1)}
+.novi-wa svg{width:24px;height:24px}
+.novi-dock .novi-launch{order:1}
+
+/* ---------- Greeting teaser ---------- */
+.novi-teaser{
+  position:absolute;right:74px;bottom:6px;width:max-content;max-width:258px;
+  background:#fff;border-radius:16px 16px 4px 16px;padding:12px 15px;
+  box-shadow:0 12px 34px rgba(10,10,40,.18);border:1px solid #e4e4ee;
+  font-size:.83rem;color:#1b1b24;line-height:1.5;
+  opacity:0;transform:translateY(10px) scale(.92);pointer-events:none;
+  transform-origin:bottom right;
+  transition:opacity .4s cubic-bezier(.22,.61,.36,1),transform .45s cubic-bezier(.34,1.3,.64,1);
+}
+.novi-teaser.is-on{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.novi-teaser b{display:block;font-size:.76rem;color:var(--novi-red);margin-bottom:2px}
+.novi-teaser__close{
+  position:absolute;top:-7px;left:-7px;width:22px;height:22px;border-radius:50%;
+  background:var(--novi-midnight);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;line-height:1;box-shadow:0 2px 6px rgba(0,0,40,.3);
+}
+.novi-teaser__close:hover{background:var(--novi-red)}
+
+/* ---------- Panel ---------- */
+.novi-panel{
+  position:fixed;right:20px;bottom:92px;z-index:951;
+  width:392px;max-width:calc(100vw - 32px);
+  height:min(632px,calc(100vh - 128px));
+  background:#fff;border-radius:22px;overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:0 34px 90px rgba(10,10,45,.3),0 6px 20px rgba(10,10,45,.14);
+  border:1px solid rgba(228,228,238,.9);
+  opacity:0;visibility:hidden;transform:translateY(22px) scale(.95);
+  transform-origin:bottom right;
+  transition:opacity .34s cubic-bezier(.22,.61,.36,1),
+             transform .42s cubic-bezier(.34,1.22,.64,1),
+             visibility .34s;
+}
+.novi.is-open .novi-panel{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+
+/* ---------- Panel header ---------- */
+.novi-head{
+  background:linear-gradient(125deg,#000022 0%,#1a1a52 60%,#2a1a4e 100%);
+  color:#fff;padding:14px 16px;display:flex;align-items:center;gap:11px;
+  position:relative;overflow:hidden;flex:none;
+}
+.novi-head::before{
+  content:'';position:absolute;top:-80px;right:-50px;width:190px;height:190px;border-radius:50%;
+  background:radial-gradient(circle,rgba(234,50,35,.45),transparent 65%);
+  animation:noviHeadGlow 9s ease-in-out infinite;
+}
+@keyframes noviHeadGlow{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-22px,16px) scale(1.18)}}
+.novi-head > *{position:relative;z-index:2}
+.novi-av{
+  width:38px;height:38px;border-radius:50%;flex:none;
+  background:linear-gradient(140deg,#ff6a44,#EA3223 55%,#F2A900);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inter Tight','Inter',sans-serif;font-weight:900;font-size:1.05rem;
+  box-shadow:0 3px 12px rgba(234,50,35,.5);position:relative;
+}
+.novi-av__live{
+  position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;
+  background:#2ecc71;border:2.5px solid #16163f;
+}
+.novi-head__t{flex:1;min-width:0}
+.novi-head__t b{display:block;font-size:.9rem;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.novi-head__t span{
+  display:flex;align-items:center;gap:5px;font-size:.7rem;color:rgba(255,255,255,.62);
+}
+.novi-head__t span i{
+  width:6px;height:6px;border-radius:50%;background:#2ecc71;display:block;
+  animation:noviBlink 2.4s ease-in-out infinite;
+}
+@keyframes noviBlink{0%,100%{opacity:1}50%{opacity:.35}}
+.novi-head__btn{
+  width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.72);transition:background .2s,color .2s;flex:none;
+}
+.novi-head__btn:hover{background:rgba(255,255,255,.14);color:#fff}
+.novi-head__btn svg{width:16px;height:16px}
+.novi-lang{
+  font-size:.68rem;font-weight:750;padding:5px 9px;border-radius:7px;
+  background:rgba(255,255,255,.14);color:#fff;display:flex;align-items:center;gap:4px;
+  transition:background .2s;
+}
+.novi-lang:hover{background:rgba(255,255,255,.26)}
+.novi-lang svg{width:8px;height:8px;opacity:.7}
+
+/* ---------- Message area ---------- */
+.novi-body{
+  flex:1;overflow-y:auto;overscroll-behavior:contain;
+  padding:18px 16px 8px;background:var(--novi-bg);
+  scrollbar-width:thin;scrollbar-color:#cfcfe0 transparent;
+}
+.novi-body::-webkit-scrollbar{width:7px}
+.novi-body::-webkit-scrollbar-thumb{background:#cfcfe0;border-radius:4px}
+.novi-body::-webkit-scrollbar-thumb:hover{background:#b4b4cc}
+.novi-body::-webkit-scrollbar-track{background:transparent}
+
+.novi-row{display:flex;gap:8px;margin-bottom:11px;align-items:flex-end}
+.novi-row--me{flex-direction:row-reverse}
+.novi-row__av{
+  width:26px;height:26px;border-radius:50%;flex:none;margin-bottom:2px;
+  background:linear-gradient(140deg,#ff6a44,#EA3223 55%,#F2A900);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  font-family:'Inter Tight','Inter',sans-serif;font-weight:900;font-size:.68rem;
+}
+.novi-row--me .novi-row__av{display:none}
+
+.novi-msg{
+  max-width:80%;padding:11px 14px;font-size:.855rem;line-height:1.56;
+  border-radius:16px 16px 16px 5px;background:#fff;color:#22222e;
+  box-shadow:0 2px 10px rgba(10,10,40,.07);
+  animation:noviIn .42s cubic-bezier(.22,.9,.36,1) backwards;
+  word-wrap:break-word;overflow-wrap:break-word;
+}
+@keyframes noviIn{
+  from{opacity:0;transform:translateY(12px) scale(.94)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.novi-row--me .novi-msg{
+  background:linear-gradient(135deg,#2B3A8C,#232f73);color:#fff;
+  border-radius:16px 16px 5px 16px;box-shadow:0 3px 12px rgba(43,58,140,.28);
+}
+.novi-msg p{margin:0 0 .55em}
+.novi-msg p:last-child{margin-bottom:0}
+.novi-msg b,.novi-msg strong{font-weight:750;color:inherit}
+.novi-msg code{
+  font-family:'Inter Tight','Inter',monospace;font-weight:800;font-size:.95em;
+  background:#fdf3dd;color:#000022;padding:1px 6px;border-radius:5px;
+  border:1px solid rgba(242,169,0,.45);white-space:nowrap;
+}
+.novi-row--me .novi-msg code{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.3);color:#fff}
+.novi-msg ul{margin:.4em 0;padding-left:1.05em}
+.novi-msg li{margin-bottom:.28em}
+.novi-msg a{color:var(--novi-blue);font-weight:650;text-decoration:underline;text-underline-offset:2px}
+.novi-row--me .novi-msg a{color:#fff}
+.novi-time{
+  font-size:.63rem;color:#9a9ab0;margin:-6px 0 12px 34px;
+}
+.novi-row--me + .novi-time{text-align:right;margin-left:0;margin-right:2px}
+
+/* Typing indicator */
+.novi-typing{
+  display:inline-flex;gap:4px;padding:14px 16px;background:#fff;border-radius:16px 16px 16px 5px;
+  box-shadow:0 2px 10px rgba(10,10,40,.07);animation:noviIn .3s var(--ease,ease) backwards;
+}
+.novi-typing i{
+  width:7px;height:7px;border-radius:50%;background:#b8b8cc;display:block;
+  animation:noviDot 1.3s ease-in-out infinite;
+}
+.novi-typing i:nth-child(2){animation-delay:.16s}
+.novi-typing i:nth-child(3){animation-delay:.32s}
+@keyframes noviDot{
+  0%,60%,100%{transform:translateY(0);opacity:.45}
+  30%{transform:translateY(-6px);opacity:1}
+}
+
+/* ---------- Rich blocks inside chat ---------- */
+.novi-card{
+  background:#fff;border:1px solid #e7e7f1;border-radius:14px;padding:13px 15px;
+  margin-bottom:11px;margin-left:34px;max-width:calc(80% + 0px);
+  box-shadow:0 2px 10px rgba(10,10,40,.07);
+  animation:noviIn .45s cubic-bezier(.22,.9,.36,1) backwards;
+}
+.novi-card__t{
+  font-size:.66rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase;
+  color:#9a9ab0;margin-bottom:7px;display:flex;align-items:center;gap:6px;
+}
+.novi-card__t i{width:6px;height:6px;border-radius:50%;background:var(--novi-red);display:block}
+.novi-card__big{
+  font-family:'Inter Tight','Inter',sans-serif;font-weight:900;font-size:1.35rem;
+  color:var(--novi-midnight);letter-spacing:-.03em;line-height:1.1;margin-bottom:3px;
+}
+.novi-card__sub{font-size:.76rem;color:#767689;line-height:1.5}
+.novi-card__row{
+  display:flex;justify-content:space-between;gap:12px;font-size:.78rem;
+  padding:6px 0;border-top:1px solid #f0f0f7;
+}
+.novi-card__row:first-of-type{border-top:0}
+.novi-card__row span{color:#767689}
+.novi-card__row b{color:var(--novi-midnight);font-weight:700;text-align:right}
+.novi-card--ok{border-color:#a9ddbe;background:linear-gradient(170deg,#f2fbf5,#fff)}
+.novi-card--ok .novi-card__t{color:#1E8E4E}
+.novi-card--ok .novi-card__t i{background:#1E8E4E}
+.novi-card--alert{border-color:#f6b7b0;background:linear-gradient(170deg,#fff5f3,#fff)}
+.novi-card--alert .novi-card__t{color:var(--novi-red)}
+.novi-ref{
+  font-family:'Inter Tight','Inter',monospace;font-weight:800;letter-spacing:.04em;
+  background:#000022;color:#fff;padding:3px 9px;border-radius:6px;font-size:.8rem;
+  display:inline-block;
+}
+
+/* agent result item */
+.novi-agent{
+  display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid #f0f0f7;
+}
+.novi-agent:first-of-type{border-top:0}
+.novi-agent__pin{
+  width:24px;height:24px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;
+  background:#e9f6ee;color:#1E8E4E;
+}
+.novi-agent__pin svg{width:13px;height:13px}
+.novi-agent__pin.is-branch{background:#fdeceb;color:var(--novi-red)}
+.novi-agent b{display:block;font-size:.8rem;color:var(--novi-midnight);line-height:1.35}
+.novi-agent span{display:block;font-size:.72rem;color:#767689;line-height:1.5}
+
+/* handover notice */
+.novi-system{
+  text-align:center;margin:4px 0 13px;animation:noviIn .4s ease backwards;
+}
+.novi-system span{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:.72rem;color:#8a6d00;background:#fdf3dd;border:1px solid rgba(242,169,0,.4);
+  padding:6px 13px;border-radius:999px;font-weight:600;
+}
+.novi-system span i{
+  width:11px;height:11px;border:2px solid rgba(242,169,0,.45);border-top-color:#d99400;
+  border-radius:50%;display:block;animation:noviSpin .85s linear infinite;
+}
+@keyframes noviSpin{to{transform:rotate(360deg)}}
+.novi-system--ok span{color:#0f5c31;background:#e9f6ee;border-color:#a9ddbe}
+.novi-system--ok span i{border:0;width:auto;height:auto;animation:none}
+
+/* ---------- Quick replies ---------- */
+.novi-chips{
+  display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px 34px;
+}
+.novi-chip{
+  padding:7px 13px;border-radius:999px;font-size:.78rem;font-weight:650;
+  background:#fff;border:1.5px solid #d8d8e8;color:var(--novi-blue);
+  transition:all .25s cubic-bezier(.34,1.3,.64,1);
+  animation:chipIn .4s cubic-bezier(.34,1.3,.64,1) backwards;
+  white-space:nowrap;
+}
+@keyframes chipIn{from{opacity:0;transform:translateY(8px) scale(.9)}to{opacity:1;transform:none}}
+.novi-chip:hover{
+  background:var(--novi-blue);color:#fff;border-color:var(--novi-blue);
+  transform:translateY(-2px);box-shadow:0 5px 14px rgba(43,58,140,.3);
+}
+.novi-chip:active{transform:translateY(0)}
+.novi-chip--urgent{color:var(--novi-red);border-color:#f3b3ad}
+.novi-chip--urgent:hover{background:var(--novi-red);border-color:var(--novi-red);box-shadow:0 5px 14px rgba(234,50,35,.32)}
+.novi-chip--go{background:var(--novi-red);color:#fff;border-color:var(--novi-red)}
+.novi-chip--go:hover{background:#c8261a;border-color:#c8261a}
+
+/* ---------- Feedback ---------- */
+.novi-rate{display:flex;align-items:center;gap:8px;margin:0 0 14px 34px;font-size:.73rem;color:#9a9ab0}
+.novi-rate button{
+  width:28px;height:28px;border-radius:8px;border:1.5px solid #e4e4ee;background:#fff;
+  display:flex;align-items:center;justify-content:center;color:#767689;
+  transition:all .25s cubic-bezier(.34,1.3,.64,1);
+}
+.novi-rate button:hover{transform:scale(1.12)}
+.novi-rate button.up:hover,.novi-rate button.up.is-on{border-color:#1E8E4E;color:#1E8E4E;background:#e9f6ee}
+.novi-rate button.down:hover,.novi-rate button.down.is-on{border-color:var(--novi-red);color:var(--novi-red);background:#fdeceb}
+.novi-rate svg{width:14px;height:14px}
+
+/* ---------- Composer ---------- */
+.novi-foot{background:#fff;border-top:1px solid #ececf4;padding:11px 13px 9px;flex:none}
+.novi-form{display:flex;align-items:flex-end;gap:8px}
+.novi-input{
+  flex:1;border:1.5px solid #e4e4ee;border-radius:20px;padding:10px 15px;
+  font-size:.855rem;line-height:1.45;max-height:94px;min-height:42px;resize:none;
+  background:#f8f8fc;transition:border-color .22s,box-shadow .22s,background .22s;
+  font-family:inherit;
+}
+.novi-input:focus{
+  outline:none;border-color:var(--novi-red);background:#fff;
+  box-shadow:0 0 0 4px rgba(234,50,35,.09);
+}
+.novi-input::placeholder{color:#a4a4ba}
+.novi-send{
+  width:42px;height:42px;border-radius:50%;flex:none;
+  background:linear-gradient(140deg,#ff5a3c,#EA3223);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(234,50,35,.4);
+  transition:transform .3s cubic-bezier(.34,1.3,.64,1),opacity .2s,box-shadow .3s;
+}
+.novi-send svg{width:17px;height:17px;transform:translateX(1px)}
+.novi-send:hover{transform:scale(1.1) rotate(8deg);box-shadow:0 7px 20px rgba(234,50,35,.52)}
+.novi-send:disabled{opacity:.38;transform:none;box-shadow:none;cursor:not-allowed}
+.novi-disclaim{
+  font-size:.64rem;color:#a4a4ba;text-align:center;line-height:1.45;
+  margin:8px 2px 0;
+}
+.novi-disclaim b{color:#767689;font-weight:650}
+
+/* consent line */
+.novi-consent{
+  margin:0 0 14px 34px;font-size:.7rem;line-height:1.5;color:#8a6d00;
+  background:#fdf3dd;border:1px solid rgba(242,169,0,.35);border-radius:11px;
+  padding:9px 12px;max-width:80%;
+  animation:noviIn .45s ease backwards;
+}
+.novi-consent a{color:#8a6d00;text-decoration:underline;font-weight:650}
+
+/* ---------- Mobile ---------- */
+@media(max-width:560px){
+  .novi-dock{right:14px;bottom:14px}
+  .novi-panel{
+    right:0;left:0;bottom:0;width:100%;max-width:none;
+    height:100dvh;border-radius:0;border:0;
+    transform:translateY(100%) scale(1);
+  }
+  .novi.is-open .novi-panel{transform:translateY(0) scale(1)}
+  .novi-head{padding:14px 15px;padding-top:max(14px,env(safe-area-inset-top))}
+  .novi-foot{padding-bottom:max(9px,env(safe-area-inset-bottom))}
+  .novi.is-open .novi-dock{opacity:0;pointer-events:none}
+  .novi-teaser{max-width:208px;font-size:.78rem}
+  .novi-launch{width:56px;height:56px}
+  .novi-msg{max-width:84%}
+}
+
+/* ---------- Inline page preview (static mock used in page sections) ---------- */
+.novi-preview{
+  width:100%;max-width:390px;border-radius:20px;overflow:hidden;background:#fff;
+  box-shadow:0 26px 70px rgba(10,10,45,.26);border:1px solid #e4e4ee;
+  display:flex;flex-direction:column;
+}
+.novi-preview .novi-body{padding:16px 14px 14px;max-height:none;min-height:0}
+.novi-preview .novi-foot{padding:10px 12px 8px}
+.novi-preview .novi-input{pointer-events:none}
+.novi-preview .novi-chips,.novi-preview .novi-card{margin-left:34px}
+.novi-preview .novi-msg,.novi-preview .novi-chip,.novi-preview .novi-card{animation:none}
+
+@media(prefers-reduced-motion:reduce){
+  .novi-launch::before,.novi-launch::after,.novi-head::before{animation:none}
+  .novi-msg,.novi-chip,.novi-card,.novi-system{animation:none !important}
+}

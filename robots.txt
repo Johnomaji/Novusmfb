@@ -1,0 +1,7 @@
+# Novus Microfinance Bank — DEMO SITE
+# This build contains placeholder rates, figures and contact details that the
+# bank has not yet confirmed. It must not be indexed. Remove this file (and the
+# noindex meta tag in each page's <head>) only once the content is signed off.
+
+User-agent: *
+Disallow: /
