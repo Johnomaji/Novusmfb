@@ -331,6 +331,22 @@ body.menu-open .mobile-menu nav > ul > li > a{animation:slideInItem .45s var(--e
 }
 .photo--wide{aspect-ratio:16/9}
 .photo--tall{aspect-ratio:3/4}
+.photo--square{aspect-ratio:1}
+
+/* Photo frame holding a real photograph */
+.photo--shot{background:var(--grey-200)}
+.photo--shot::before{content:none}
+.photo--shot>img{
+  position:absolute;inset:0;z-index:1;
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.photo--shot .photo__icon{display:none}
+.photo--shot .photo__note{background:rgba(0,0,20,.55)}
+.photo__cap{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  padding:30px 16px 13px;color:#fff;font-size:.72rem;line-height:1.45;
+  background:linear-gradient(180deg,rgba(0,0,34,0),rgba(0,0,34,.78));
+}
 
 /* ---------- 9. Cards ---------- */
 .card{
